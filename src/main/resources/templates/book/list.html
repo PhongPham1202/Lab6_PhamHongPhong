@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+    <style>
+        .search-form {
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .search-form .form-control {
+            border-color: #007bff; /* Blue border */
+            background-color: #ffffff; /* White background */
+        }
+        .search-form .btn {
+            background-color: #007bff; /* Blue background */
+            border-color: #007bff; /* Blue border */
+            color: #ffffff; /* White text */
+        }
+        .search-form .btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #0056b3; /* Darker blue border on hover */
+        }
+    </style>
+</head>
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container">
+    <h1 th:text="${title}"></h1>
+
+    <!-- Search Form -->
+    <form th:action="@{/books/search}" method="get" class="form-inline justify-content-center mt-4 mb-4 search-form">
+        <div class="input-group">
+            <input class="form-control" type="search" placeholder="Nhập tên sách/tác giả" aria-label="Search" name="keyword">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit">Tìm</button>
+            </div>
+        </div>
+    </form>
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Tác giả</th>
+            <th>Giá</th>
+            <th>Loại</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.category.name}"></td>
+            <td>
+                <button class="btn btn-primary">
+                    <a style="color: white; text-decoration: none" th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+                </button>
+                <button class="btn btn-danger">
+                    <a style="color: white; text-decoration: none" th:href="@{/books/delete/{id}(id=${book.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+                </button>
+                <form th:action="@{/books/add-to-cart}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${book.getId()}">
+                    <input type="hidden" name="name" th:value="${book.getTitle()}">
+                    <input type="hidden" name="price" th:value="${book.getPrice()}">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to add this book to cart?')">Add to cart</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+</head>
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container">
+    <h1>Add Book</h1>
+    <form th:action="@{/books/add}" th:object="${book}" method="post">
+        <div class="col-6 mb-3">
+            <input type="hidden" th:field="*{id}" id="id">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="title">Tên sách: </label>
+            <input class="form-control" type="text" th:field="*{title}" id="title" required minlength="2" maxlength="100">
+<!--            <div th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="text-danger">Thiếu tên sách</div>-->
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="author">Tác giả: </label>
+            <input class="form-control" type="text" th:field="*{author}" id="author" required minlength="2" maxlength="50">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="price">Giá: </label>
+            <input class="form-control" type="number" th:field="*{price}" id="price" required min="0" step="0.01">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="category">Loại: </label>
+            <select class="form-control" id="category" name="category.id">
+                <option value="">--Chọn thể loại--</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>        </div>
+        <input type="submit" class="btn btn-primary" value="Save">
+    </form>
+    <br>
+    <a th:href="@{/books}">Back to list</a>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+</body>
+</html>
